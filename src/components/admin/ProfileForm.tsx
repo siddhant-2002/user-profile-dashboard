@@ -1,30 +1,37 @@
 import React from 'react';
+import { Profile, ProfileFormData } from '../../types/Profile';
 import { X } from 'lucide-react';
 
- const ProfileForm = ({
+interface ProfileFormProps {
+  initialData?: Profile;
+  onSubmit: (data: ProfileFormData) => void;
+  onCancel: () => void;
+}
+
+export const ProfileForm: React.FC<ProfileFormProps> = ({
   initialData,
   onSubmit,
   onCancel,
 }) => {
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-
-    const profileData = {
-      name: formData.get('name'),
-      photo: formData.get('photo'),
-      description: formData.get('description'),
-      address: formData.get('address'),
+    
+    const profileData: ProfileFormData = {
+      name: formData.get('name') as string,
+      photo: formData.get('photo') as string,
+      description: formData.get('description') as string,
+      address: formData.get('address') as string,
       coordinates: {
-        lat: formData.get('lat'),
-        lng: formData.get('lng'),
+        lat: formData.get('lat') as string,
+        lng: formData.get('lng') as string,
       },
       contact: {
-        email: formData.get('email'),
-        phone: formData.get('phone'),
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
       },
-      interests: formData.get('interests')
-        ? formData.get('interests').split(',').map((i) => i.trim())
+      interests: formData.get('interests') as string
+        ? (formData.get('interests') as string).split(',').map(i => i.trim())
         : [],
     };
 
@@ -97,7 +104,7 @@ import { X } from 'lucide-react';
             <input
               type="text"
               name="lat"
-              defaultValue={initialData?.coordinates?.lat}
+              defaultValue={initialData?.coordinates.lat}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
@@ -107,7 +114,7 @@ import { X } from 'lucide-react';
             <input
               type="text"
               name="lng"
-              defaultValue={initialData?.coordinates?.lng}
+              defaultValue={initialData?.coordinates.lng}
               required
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
@@ -165,5 +172,3 @@ import { X } from 'lucide-react';
     </form>
   );
 };
-
-export default ProfileForm;

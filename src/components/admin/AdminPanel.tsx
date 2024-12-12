@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import ProfileForm from './ProfileForm';
+import { Profile, ProfileFormData } from '../../types/Profile';
+import { useProfiles } from '../../context/ProfileContext';
+import { ProfileForm } from './ProfileForm';
 import { Pencil, Trash2, Plus } from 'lucide-react';
 
-const AdminPanel = ({ profiles, addProfile, updateProfile, deleteProfile }) => {
-  const [editingProfile, setEditingProfile] = useState(null);
+export const AdminPanel: React.FC = () => {
+  const { profiles, addProfile, updateProfile, deleteProfile } = useProfiles();
+  const [editingProfile, setEditingProfile] = useState<Profile | null>(null);
   const [isAddingProfile, setIsAddingProfile] = useState(false);
 
-  const handleAddProfile = (data) => {
+  const handleAddProfile = (data: ProfileFormData) => {
     addProfile({
       ...data,
       coordinates: {
@@ -17,7 +20,7 @@ const AdminPanel = ({ profiles, addProfile, updateProfile, deleteProfile }) => {
     setIsAddingProfile(false);
   };
 
-  const handleUpdateProfile = (data) => {
+  const handleUpdateProfile = (data: ProfileFormData) => {
     if (editingProfile) {
       updateProfile(editingProfile.id, {
         ...data,
@@ -30,7 +33,7 @@ const AdminPanel = ({ profiles, addProfile, updateProfile, deleteProfile }) => {
     }
   };
 
-  const handleDeleteProfile = (id) => {
+  const handleDeleteProfile = (id: number) => {
     if (window.confirm('Are you sure you want to delete this profile?')) {
       deleteProfile(id);
     }
@@ -116,8 +119,12 @@ const AdminPanel = ({ profiles, addProfile, updateProfile, deleteProfile }) => {
                   <div className="text-sm text-gray-900">{profile.address}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{profile.contact?.email}</div>
-                  <div className="text-sm text-gray-500">{profile.contact?.phone}</div>
+                  <div className="text-sm text-gray-900">
+                    {profile.contact?.email}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    {profile.contact?.phone}
+                  </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
@@ -141,5 +148,3 @@ const AdminPanel = ({ profiles, addProfile, updateProfile, deleteProfile }) => {
     </div>
   );
 };
-
-export default AdminPanel;
